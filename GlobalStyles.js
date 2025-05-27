@@ -4,6 +4,9 @@ import Breakpoints from './utils/Breakpoints';
 
 import palettes from './themes/palettes';
 
+export const FetchStyles = theme =>
+  StyleSheet.create({ Fetch: { style: { minHeight: 40 }, props: {} } });
+
 export const ExpoImageStyles = theme =>
   StyleSheet.create({
     Image: { style: { height: 100, width: 100 }, props: {} },

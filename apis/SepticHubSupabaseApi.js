@@ -132,9 +132,17 @@ export const FetchGetOrdersGET = ({
   return children({ loading, data, error, refetchGetOrders: refetch });
 };
 
-export const orderAddressGET = async (Constants, _args, handlers, timeout) => {
+export const orderAddressGET = async (
+  Constants,
+  { selectedOrderId },
+  handlers,
+  timeout
+) => {
   const paramsDict = {};
   paramsDict['select'] = '*,house:houses(id,address,latitude,longitude)';
+  if (selectedOrderId !== undefined) {
+    paramsDict['id'] = `eq.${renderParam(selectedOrderId)}`;
+  }
   const url = `https://hgezxpwspfsiwfdvszsy.supabase.co/rest/v1/orders${renderQueryString(
     paramsDict
   )}`;
@@ -210,6 +218,7 @@ export const FetchOrderAddressGET = ({
   retry,
   staleTime,
   timeout,
+  selectedOrderId,
 }) => {
   const Constants = GlobalVariables.useValues();
   const isFocused = useIsFocused();
@@ -221,7 +230,7 @@ export const FetchOrderAddressGET = ({
     error,
     refetch,
   } = useOrderAddressGET(
-    {},
+    { selectedOrderId },
     {
       refetchInterval,
       refetchOnWindowFocus,

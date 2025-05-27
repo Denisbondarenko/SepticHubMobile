@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapMarker, MapView } from '@draftbit/maps';
+import { MapView } from '@draftbit/maps';
 import {
   Button,
   ScreenContainer,
@@ -10,10 +10,10 @@ import { ActivityIndicator, Text, View } from 'react-native';
 import { Fetch } from 'react-request';
 import * as GlobalStyles from '../GlobalStyles.js';
 import * as SepticHubSupabaseApi from '../apis/SepticHubSupabaseApi.js';
+import * as GlobalVariables from '../config/GlobalVariableContext';
 import palettes from '../themes/palettes';
 import Breakpoints from '../utils/Breakpoints';
 import * as StyleSheet from '../utils/StyleSheet';
-import imageSource from '../utils/imageSource';
 import useIsFocused from '../utils/useIsFocused';
 import useNavigation from '../utils/useNavigation';
 import useParams from '../utils/useParams';
@@ -22,6 +22,8 @@ import useWindowDimensions from '../utils/useWindowDimensions';
 const OrderDetailsScreen = props => {
   const { theme } = props;
   const dimensions = useWindowDimensions();
+  const Constants = GlobalVariables.useValues();
+  const Variables = Constants;
   const [textInputValue, setTextInputValue] = React.useState('');
 
   return (
@@ -52,48 +54,42 @@ const OrderDetailsScreen = props => {
               dimensions.width
             )}
           >
-            <MapView
-              autoClusterMarkers={false}
-              autoClusterMarkersDistanceMeters={10000}
-              keyExtractor={(mapViewData, index) =>
-                mapViewData?.id ??
-                mapViewData?.uuid ??
-                index?.toString() ??
-                JSON.stringify(mapViewData)
-              }
-              latitude={37.40241}
-              listKey={'Container->Tracking Details View->MapWrapper->Map View'}
-              loadingEnabled={true}
-              markersData={'data.ordersData'}
-              moveOnMarkerPress={true}
-              renderItem={({ item, index }) => {
-                const mapViewData = item;
-                return (
-                  <MapMarker
-                    androidUseDefaultIconImplementation={false}
-                    pinImageSize={50}
-                    tracksViewChanges={true}
-                    description={'My Test Address'}
-                    flat={true}
-                    latitude={26.2389}
-                    longitude={73.0243}
-                    pinColor={palettes.ShipIt['App Green']}
-                    title={'Arvind Limba'}
-                  />
-                );
-              }}
-              rotateEnabled={true}
-              scrollEnabled={true}
-              showsPointsOfInterest={true}
-              zoom={8}
-              zoomEnabled={true}
-              apiKey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
-              followsUserLocation={true}
-              loadingIndicatorColor={palettes.ShipIt['App Green']}
-              longitude={73.0243}
-              showsCompass={true}
-              showsUserLocation={true}
-            />
+            <>
+              {!'{{data.OrderAddress.house.latitude}}' ? null : (
+                <MapView
+                  autoClusterMarkers={false}
+                  autoClusterMarkersDistanceMeters={10000}
+                  keyExtractor={(mapViewData, index) =>
+                    mapViewData?.id ??
+                    mapViewData?.uuid ??
+                    index?.toString() ??
+                    JSON.stringify(mapViewData)
+                  }
+                  listKey={
+                    'Container->Tracking Details View->MapWrapper->Map View'
+                  }
+                  loadingEnabled={true}
+                  markersData={'[data.OrderAddress]'}
+                  moveOnMarkerPress={true}
+                  renderItem={({ item, index }) => {
+                    const mapViewData = item;
+                    return null;
+                  }}
+                  rotateEnabled={true}
+                  scrollEnabled={true}
+                  showsPointsOfInterest={true}
+                  zoom={8}
+                  zoomEnabled={true}
+                  apiKey={process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}
+                  followsUserLocation={true}
+                  latitude={Constants['Lattitude']}
+                  loadingIndicatorColor={palettes.App['Custom Color 2']}
+                  longitude={Constants['longitude']}
+                  showsCompass={true}
+                  showsUserLocation={true}
+                />
+              )}
+            </>
           </View>
 
           <View style={StyleSheet.applyWidth({ gap: 8 }, dimensions.width)}>
@@ -111,7 +107,7 @@ const OrderDetailsScreen = props => {
                 dimensions.width
               )}
             >
-              {'Stop # 1'}
+              {'Order {{}}'}
             </Text>
             {/* CheckIn */}
             <Button
@@ -166,7 +162,7 @@ const OrderDetailsScreen = props => {
                     decelerationRate={'normal'}
                     horizontal={false}
                     inverted={false}
-                    keyExtractor={(listData, index) => listData?.service_id}
+                    keyExtractor={(listData, index) => listData?.service_type}
                     keyboardShouldPersistTaps={'never'}
                     listKey={
                       'Container->OrderDetails->OrderDetails->Fetch->List'
@@ -192,7 +188,7 @@ const OrderDetailsScreen = props => {
                               dimensions.width
                             )}
                           >
-                            {null}
+                            {listData?.service_type}
                           </Text>
                         </View>
                       );
@@ -201,7 +197,12 @@ const OrderDetailsScreen = props => {
                     showsVerticalScrollIndicator={true}
                     snapToAlignment={'start'}
                     style={StyleSheet.applyWidth(
-                      { paddingLeft: 32, paddingRight: 32, right: -25 },
+                      {
+                        flexDirection: 'column',
+                        paddingLeft: 32,
+                        paddingRight: 32,
+                        right: -25,
+                      },
                       dimensions.width
                     )}
                   />

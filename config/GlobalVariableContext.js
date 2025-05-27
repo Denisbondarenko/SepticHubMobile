@@ -9,6 +9,8 @@ export const AppVariables = {
     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhnZXp4cHdzcGZzaXdmZHZzenN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEwNDA4MDksImV4cCI6MjA1NjYxNjgwOX0.fK6DSZ8G-Fx7eywtrja32tlp6a6P3PchL97tqa7lpRM',
   AUTHORIZATION_HEADER:
     'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhnZXp4cHdzcGZzaXdmZHZzenN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEwNDA4MDksImV4cCI6MjA1NjYxNjgwOX0.fK6DSZ8G-Fx7eywtrja32tlp6a6P3PchL97tqa7lpRM',
+  Lattitude: '{{ data.OrderAddress.house.latitude }}',
+  longitude: '{{ data.OrderAddress.house.longitude}}',
   MyBalance: 21,
 };
 const GlobalVariableContext = React.createContext();
